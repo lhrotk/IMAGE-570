@@ -1,0 +1,16 @@
+function radius_power = radius_power(FFTArray)
+%RADIUS_POWER Summary of this function goes here
+%   Detailed explanation goes here
+[M, N] = size(FFTArray);
+radius_power = zeros(2, N/2);
+total_power = 0;
+for i = 1:M
+    for j = 1:N
+        total_power = total_power + FFTArray(i,j)^2;
+    end
+end
+for r=1:N/2
+    for i=1:M
+end
+end
+
