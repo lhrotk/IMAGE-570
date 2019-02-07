@@ -5,7 +5,7 @@ HW 2 - PROBLEM 3 - student file
 close all; clear all; clc;
 
 %% Mathematical Model of the Motion Blur
-mn=0; st=0.1;K=0.07;%0.001 0.1  %noise level
+mn=0; st=0.001;%0.001 0.1  %noise level
 
 USE_PSUEDO=1; % use psuedo filter
     
@@ -41,14 +41,17 @@ title('original image')
 %back to spatial domain
 I_motion_n=ifft2(ifftshift(I_motion_fn));
 subplot(1,3,2); imagesc(abs(I_motion_n))
-title('image after degradation 0.1')
+title('image after degradation 0.001')
 
 %% Reconstruction
-H2 = H.^2;
-wFilt = (1./H).*(H2./(H2+K));
+InvFilt = 1./H;
+if USE_PSUEDO
+    threshold = 0.1;
+    InvFilt(abs(H)<threshold)=0;
+end
 
-I_recon_fn=I_motion_fn.*wFilt;
+I_recon_fn=I_motion_fn.*InvFilt;
 
 I_recon=ifft2(ifftshift(I_recon_fn));
 subplot(1,3,3),imagesc(abs(I_recon))
-title('reconstruction from degraded image with wiener filter K=0.07')
+title('reconstruction from degraded image with pseudo inverse')
