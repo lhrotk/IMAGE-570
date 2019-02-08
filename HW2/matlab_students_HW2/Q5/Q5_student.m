@@ -5,10 +5,10 @@ HW 2 - PROBLEM 5- Student File
 clear all; close all; clc;
 
 %%
-pltstp=40; %
-maxAngRange=0:10:720; %
+pltstp=40; %plot step of polar 
+maxAngRange=0:720:720; % step size of twist
 
-A=uint8(255*checkerboard(16));%
+A=uint8(255*checkerboard(16));% initial checkerboard
 subplot(131); imshow(A);
 
 %%
@@ -28,40 +28,38 @@ x=c-midc;
 y=midr-r;
 
 %%
-[th,rho]=cart2pol(x,y);%
+[th,rho]=cart2pol(x,y);% change to polar coordinate
 
 for maxAngDeg=maxAngRange,
     
     maxRho=max(rho(:));
-    maxAng=maxAngDeg*pi/180;%
+    maxAng=maxAngDeg*pi/180;%max angle in rad
     
     th2=th+(rho/maxRho)*maxAng;        
     rho2=rho;
     
     subplot(132);hold off
-    polar(th2(1:pltstp:end),rho2(1:pltstp:end),'go')%
+    polar(th2(1:pltstp:end),rho2(1:pltstp:end),'go')%plot the polar coordinate
     
-    [x2,y2]=pol2cart(th2,rho2);%
+    [x2,y2]=pol2cart(th2,rho2);%convert from polar to x-y
     
     c2=x2+midc;
     r2=midr-y2;
     
-    %
+    % find the corresponding points in A and B
     B=uint8(zeros(size(A)));
     for r=1:nRows, %
         for c=1:nCols,
             if r2(r,c)>=1 && r2(r,c)<=nRows && ...
-                    c2(r,c)>=1 && c2(r,c)<=nCols, %               
+                    c2(r,c)>=1 && c2(r,c)<=nCols, % don't go out of A              
                 
                 
-                B(r,c,:)=A(round(r2(r,c)),round(c2(r,c)),:);%
+                B(r,c,:)=A(round(r2(r,c)),round(c2(r,c)),:);% Points in B are rotated from A
             end
         end
     end   
     subplot(133)
     imshow(B);
-    % set bacground of image to white
-    set(gcf,'Color',[1 1 1]);
     
     pause(0.5)
 end

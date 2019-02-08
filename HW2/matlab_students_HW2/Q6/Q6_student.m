@@ -7,7 +7,7 @@ clear all; close all; clc;
 %% create vid
 f=imresize(im2double(rgb2gray(imread('paris.jpg'))),0.5);
 
-T=.001;%threshold change detected
+T=.0001;%threshold change detected
 nz=0;
 frms=20;
 
@@ -60,7 +60,7 @@ for k=1:frms
 end
 
 %% play movie
-implay(vid)
+%implay(vid)
 
 %% accumulate difference
 longest_run=zeros(size(f)); %initialize the longest #frames without change (for each pixel)
@@ -108,3 +108,28 @@ imagesc(recon)
 axis image
 colormap gray
 title('recon')
+
+%% accumulate for median and mean
+vid_mean = mean(vid, 4);
+vid_median = median(vid, 4);
+%% reconstruct the background image
+recon=nan*ones(size(f)); %init same size as one of the frames
+for x=1:size(f,1) % for each pixel...
+    for y=1:size(f,2) %...
+        %set the intensity of recon image at pixel x,y
+        %to be intensity of the same pixel location
+        %but in the last frame of the longest run
+        recon(x,y)=vid(x,y,1,frm_longest_run(x,y));        
+    end
+end
+%% calculate abs error
+error_longrun = abs(recon-f);
+error_median = abs(vid_median-f);
+error_mean = abs(vid_mean-f);
+figure
+subplot(2,3,1);imagesc(error_longrun);colormap gray;title('recon-longrun');
+subplot(2,3,2);imagesc(error_mean);colormap gray;title('recon-mean');
+subplot(2,3,3);imagesc(error_median);colormap gray;title('recon-median');
+subplot(2,3,4);imagesc(recon);colormap gray;title('recon-longrun');
+subplot(2,3,5);imagesc(vid_mean);colormap gray;title('recon-mean');
+subplot(2,3,6);imagesc(vid_median);colormap gray;title('recon-median');
