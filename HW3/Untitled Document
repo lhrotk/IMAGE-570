@@ -1,0 +1,1 @@
+dctmtx(n) returns the n-by-n discrete cosine transform (DCT) matrix, which you can use to perform a 2-D DCT on an image.
