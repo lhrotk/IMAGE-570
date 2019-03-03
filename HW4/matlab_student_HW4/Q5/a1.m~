@@ -1,0 +1,27 @@
+I = load('input.mat');
+I = I.input;
+imshow(I);
+attacker = zeros(4,3,3,3);
+attacker(1,1,:,:) = [-1 0 -1; 0 1 1;-1 1 1];
+attacker(1,2,:,:) = [-1 1 1; 0 1 1;-1 0 -1];
+attacker(1,3,:,:) = [-1 -1 1; 0 1 1;-1 -1 1];
+attacker(2,1,:,:) = [-1 0 -1; 1 1 0;1 1 -1];
+attacker(2,2,:,:) = [-1 0 -1; 0 1 1;-1 1 1];
+attacker(2,3,:,:) = [-1 0 -1; -1 1 -1;1 1 1];
+attacker(3,1,:,:) = [1 1 -1; 1 1 0;-1 0 -1];
+attacker(3,2,:,:) = [-1 0 -1; 1 1 0;1 1 -1];
+attacker(3,3,:,:) = [1 -1 -1; 1 1 0;1 -1 -1];
+attacker(4,1,:,:) = [-1 1 1; 0 1 1;-1 0 -1];
+attacker(4,2,:,:) = [1 1 -1; 1 1 0;-1 0 -1];
+attacker(4,3,:,:) = [1 1 1; -1 1 -1;-1 0 -1];
+[w, h] = size(I);
+for n=1:4
+    maskmat = zeros(w,h);
+    for i=2:w-1
+        for j=2:h-2
+              mask(I, maskmat, attacker(n,:,:,:),i, j);
+        end
+    end
+end
+I = I & mask
+imshow(I);
